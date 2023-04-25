@@ -17,6 +17,7 @@ typedef struct {
 int main(void)
 {
     int choice;
+    system("cls");
     printf("What do you want:\n");
     printf("	1. Add a league\n");
     printf("	2. Modify a league\n");
@@ -25,6 +26,7 @@ int main(void)
     printf("	5. List all leagues\n");
     printf("	0. Exit\n");
 
+    printf("\nEnter your choice: ");
     do
     {
         scanf("%d", &choice);
@@ -37,12 +39,14 @@ int main(void)
     {
         if (!firstTime)
         {
-            printf("What do you want agin:\n");
+            system("cls");
+            printf("What do you want again:\n");
             printf("	1. Modify the league\n");
             printf("	2. List the league\n");
             printf("	3. Remove the league\n");
             printf("	0. Exit\n");
 
+            printf("\nEnter your choice: ");
             do
             {
                 fflush(stdin);
