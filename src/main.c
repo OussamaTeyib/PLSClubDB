@@ -1,7 +1,7 @@
 /*
-    A simple database to store the real names of clubs in Pro League Soccer
-    Written by Oussama Teyib
-    May, 2022 in Noudhibou
+    A simple database to store the real names of the clubs in the game Pro League Soccer.
+    Written by Oussama Teyib.
+    May, 2022 in Nouadhibou.
 */    
 
 #include <stdio.h>
@@ -10,7 +10,7 @@
 
 void die(char *msg)
 {
-    fprintf(stderr, "%s", msg);
+    fprintf(stderr, "%s\n", msg);
     exit(EXIT_FAILURE);
 }
 
@@ -97,8 +97,8 @@ int main(void)
                     scanf("%d", &nClubs);
                     if (!nClubs)
                     {
-                        printf("\nNumber of clubs can't be null!");
-                        printf("\nEnter a valid number: ");
+                        printf("\nNumber of clubs can't be null!\n");
+                        printf("Enter a valid number: ");
                     }
                 } while (!nClubs);
                 fwrite(&nClubs, sizeof nClubs, 1, league);
@@ -112,26 +112,26 @@ int main(void)
                     fflush(stdin);
                     scanf("%d", &club.isKnown);
 
-					if (club.isKnown)
-					{
-                        printf("Enter the fake name: ");
-                        fflush(stdin);
-                        fgets(club.fakeName, MAX, stdin);
-                        club.fakeName[strlen(club.fakeName) - 1] = '\0';
-                        
+                    if (club.isKnown)
+                    {
                         printf("Enter the real name: ");
                         fflush(stdin);
                         fgets(club.realName, MAX, stdin);
                         club.realName[strlen(club.realName) - 1] = '\0';
-					}
-					else
-					{
-					    strncpy(club.fakeName, "Not Given", MAX);
-					    strncpy(club.realName, "Unknown", MAX);
-					}	
+
+                        printf("Enter the fake name: ");
+                        fflush(stdin);
+                        fgets(club.fakeName, MAX, stdin);
+                        club.fakeName[strlen(club.fakeName) - 1] = '\0';
+                    }
+                    else
+                    {
+                        strncpy(club.fakeName, "Not Given", MAX);
+                        strncpy(club.realName, "Unknown", MAX);
+                    }    
                     
                     fwrite(&club, sizeof club, 1, league);
-                    counter++;					
+                    counter++;                    
                 }   
                   
                 fclose(league);
@@ -163,10 +163,10 @@ int main(void)
                         
                         int tempChoice;
                         printf("\nWhat do you wanna modify:\n");
-                        printf("    1. Fake Name\n");
-                        printf("    2. Real Name\n");
-                        printf("    3. Both\n");
-                        printf("    0. Nothing\n");
+                        printf("	1. Fake Name\n");
+                        printf("	2. Real Name\n");
+                        printf("	3. Both\n");
+                        printf("	0. Nothing\n");
                         printf("Enter your choice: ");
                         do
                         {
@@ -178,31 +178,32 @@ int main(void)
                         
                         switch(tempChoice)
                         {
-                            case 1: // modify fake name
+                            case 1: // modify the fake name
                                 printf("\nEnter the fake name: ");                           
                                 fflush(stdin);
                                 fgets(club.fakeName, MAX, stdin);
                                 club.fakeName[strlen(club.fakeName) - 1] = '\0';
                                 break;
                             
-                            case 2: // modify real name
-                                printf("Enter the real name: ");
+                            case 2: // modify the real name
+                                printf("\nEnter the real name: ");
                                 fflush(stdin);
                                 fgets(club.realName, MAX, stdin);
                                 club.realName[strlen(club.realName) - 1] = '\0';
                                 club.isKnown = 1;
                                 break;
                             
-                            case 3: // modify both of them
+                            case 3: // modify them both
+                                printf("Enter the real name: ");
+                                fflush(stdin);
+                                fgets(club.realName, MAX, stdin);
+                                club.realName[strlen(club.realName) - 1] = '\0';
+
                                 printf("\nEnter the fake name: ");
                                 fflush(stdin);
                                 fgets(club.fakeName, MAX, stdin);
                                 club.fakeName[strlen(club.fakeName) - 1] = '\0';
-                                
-                                 printf("Enter the real name: ");
-                                fflush(stdin);
-                                fgets(club.realName, MAX, stdin);
-                                club.realName[strlen(club.realName) - 1] = '\0';
+      
                                 club.isKnown = 1;
                                 break;
                              
@@ -215,6 +216,7 @@ int main(void)
                             fseek(league, - (long) sizeof club, SEEK_CUR);
                             fwrite(&club, sizeof club, 1, league);
                             printf("\nDone!");
+                            break;
                         }
                     }
                 }
@@ -236,7 +238,7 @@ int main(void)
                 if (1 == fread(&nClubs, sizeof nClubs, 1, league))
                 {
                     empty = 0;
-                    printf ("\nNumber of clubs is: %d\n", nClubs);                                
+                    printf("\nNumber of clubs is: %d\n", nClubs);                                
                     printf("Print unknown clubs? (1/0): ");
                     fflush(stdin);
                     scanf("%d", &printUnknown);

@@ -1,2 +1,5 @@
-bin/main: src/main
-	gcc -o bin/main src/main.c -Wall -Wextra -Werror -std=c18
+build: src/main.c
+	gcc -o bin/main.exe src/main.c -Wall -Wextra -Werror -std=c18
+
+run:
+	cd bin && main.exe 
