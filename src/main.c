@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 
 void die(char *msg)
 {
@@ -231,15 +232,14 @@ int main(void)
                 if (!league)
                     die("Cannot open the file!");
                 
-                int empty = 1, printUnknown;;
-                if (1 == fread(&nClubs, sizeof nClubs, 1, league))
-                {
-                    empty = 0;
-                    printf("\nNumber of clubs is: %d\n", nClubs);                                
-                    printf("Print unknown clubs? (1/0): ");
-                    fflush(stdin);
-                    scanf("%d", &printUnknown);
-                }         
+                if (1 != fread(&nClubs, sizeof nClubs, 1, league))
+                    die("This file is empty!");
+
+                int printUnknown;
+                printf("\nNumber of clubs is: %d\n", nClubs);
+                printf("Print unknown clubs? (1/0): ");
+                fflush(stdin);
+                scanf("%d", &printUnknown);                                         
                 
                 while (1 == fread(&club, sizeof club, 1, league))
                 {
@@ -250,10 +250,7 @@ int main(void)
                     printf("Fake Name: %s\n", club.fakeName);
                     printf("Real Name: %s\n", club.realName);
                 }
-                
-                if (empty)
-                    die("This file is empty!");
-                    
+ 
                 fclose(league);
                 repeat = 1;
                 break;
@@ -285,10 +282,57 @@ int main(void)
             }
 
             case 5: // print all leagues
-            
+            {  
+                WIN32_FIND_DATAA findData;
+                HANDLE hFind = FindFirstFileA("../leagues/*.bin", &findData);   
+                if (hFind == INVALID_HANDLE_VALUE)
+                    die("Cannot find any league!");
+
+                int printUnknown;
+                printf("Print unknown clubs? (1/0): ");
+                fflush(stdin);
+                scanf("%d", &printUnknown);
+
+                do
+                {
+                    if (!(findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+                    {
+                        char name[MAX_LEAGUE_NAME];                     
+                        snprintf(name, MAX_LEAGUE_NAME, "../leagues/%s", findData.cFileName);
+                        league = fopen(name, "rb");
+                        if (!league)
+                        {
+                            fprintf(stderr, "ERROR: Cannot open '%s'!\n", findData.cFileName);
+                            continue;
+                        }
+                
+                        if (1 != fread(&nClubs, sizeof nClubs, 1, league))
+                        {
+                            fprintf(stderr, "ERROR: '%s' is empty!\n", findData.cFileName);
+                            continue;
+                        }
+
+                        printf("\nLeague: %s (%d clubs)\n", strtok(findData.cFileName, "."), nClubs);                                
+                
+                        while (1 == fread(&club, sizeof club, 1, league))
+                        {
+                            if (!printUnknown && !club.isKnown)
+                                continue;
+                        
+                            printf("\n	Club #%d\n", club.id);
+                            printf("	Fake Name: %s\n", club.fakeName);
+                            printf("	Real Name: %s\n", club.realName);
+                        }
+                        printf("\n");
+                        fclose(league);
+                    }
+                } while(FindNextFileA(hFind, &findData));
+
+                FindClose(hFind);
                 again = 0;
                 repeat = 0;
                 break;
+            }
 
             case 0: // exiting
                 again = 0;

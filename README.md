@@ -3,4 +3,4 @@ This program is a simple database to store the real names of the clubs in the ga
 
 # Credits
 This code was written by Oussama Teyib.
-May, 2022 in Nouadhibou.
+May, 2023 in Nouadhibou.
