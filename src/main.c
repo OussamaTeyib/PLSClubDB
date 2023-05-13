@@ -1,9 +1,3 @@
-/*
-    A simple database to store the real names of the clubs in the game Pro League Soccer.
-    Written by Oussama Teyib.
-    May, 2022 in Nouadhibou.
-*/    
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,6 +9,7 @@ void die(char *msg)
 }
 
 #define MAX 30
+#define MAX_LEAGUE_NAME 50
 
 typedef struct {
     int id;
@@ -43,14 +38,14 @@ int main(void)
             printf("\nEnter a valid choice [0, 5]: ");
     } while (choice < 0 || choice > 5);
     
-    char temp[MAX], name[MAX];
+    char temp[MAX_LEAGUE_NAME], name[MAX_LEAGUE_NAME];
     if (choice && choice != 5)
     {
         printf("Enter the name of the league: ");
         fflush(stdin);
-        fgets(temp, MAX, stdin);
+        fgets(temp, MAX_LEAGUE_NAME, stdin);
         temp[strlen(temp) - 1] = '\0';
-        snprintf(name, MAX, "../results/%s.bin", temp);
+        snprintf(name, MAX_LEAGUE_NAME, "../leagues/%s.bin", temp);
     }
 
     int firstTime = 1;
@@ -80,7 +75,7 @@ int main(void)
         firstTime = 0;  
 
         FILE *league;
-        int nClubs, again, counter;
+        int nClubs, again, repeat, counter;
         Club club;
         switch(choice)
         {
@@ -135,6 +130,7 @@ int main(void)
                 }   
                   
                 fclose(league);
+                repeat = 1;
                 break;
             }
             
@@ -194,12 +190,12 @@ int main(void)
                                 break;
                             
                             case 3: // modify them both
-                                printf("Enter the real name: ");
+                                printf("\nEnter the real name: ");
                                 fflush(stdin);
                                 fgets(club.realName, MAX, stdin);
                                 club.realName[strlen(club.realName) - 1] = '\0';
 
-                                printf("\nEnter the fake name: ");
+                                printf("Enter the fake name: ");
                                 fflush(stdin);
                                 fgets(club.fakeName, MAX, stdin);
                                 club.fakeName[strlen(club.fakeName) - 1] = '\0';
@@ -225,6 +221,7 @@ int main(void)
                     printf("The ID is incorrect!\n");
                     
                 fclose(league);
+                repeat = 1;
                 break;
             }
 
@@ -258,28 +255,46 @@ int main(void)
                     die("This file is empty!");
                     
                 fclose(league);
+                repeat = 1;
                 break;
             }
             
             case 4: // removing
-                if(!remove(name))
+            {
+                int tempChoice;
+                printf("\nDo you want to remove the league? (1/0): ");
+                fflush(stdin);
+                scanf("%d", &tempChoice);
+                if (tempChoice)
                 {
-                    printf("Removed!\n");    
-                    again = 0;    
+                    if(!remove(name))
+                    {
+                        printf("Removed!\n");
+                        repeat = 0;    
+                        again = 0;    
+                    }
+                    else
+                        die("Cannot find the file!");
                 }
                 else
-                    die("Cannot find the file!");
+                {
+                    printf("\nBe sure the next time!");
+                    repeat = 1;
+                }
                 break;
+            }
 
             case 5: // print all leagues
             
                 again = 0;
+                repeat = 0;
                 break;
 
             case 0: // exiting
                 again = 0;
+                repeat = 0;
         }   
-        if (choice && choice != 4 && choice != 5)
+        if (repeat)
         {
             printf("\nAgain? (1/0): ");
             fflush(stdin);
