@@ -141,85 +141,84 @@ int main(void)
                 if (!league)
                     die("Cannot open the file!");
                 
-                // skeep nClubs
-                fread(&nClubs, sizeof nClubs, 1, league); 
+                if (1 != fread(&nClubs, sizeof nClubs, 1, league))
+                    die("This file is empty!"); 
                 
                 int tempID, found = 0;
                 printf ("Enter the id of the club: ");
                 fflush(stdin);
                 scanf("%d", &tempID);
                
-                while (1 == fread(&club, sizeof club, 1, league))
-                {
-                    if (club.id == tempID)
-                    {
-                        found = 1;
-                        printf("\nClub #%d\n", club.id);
-                        printf("Fake Name: %s\n", club.fakeName);
-                        printf("Real Name: %s\n", club.realName);
-                        
-                        int tempChoice;
-                        printf("\nWhat do you wanna modify:\n");
-                        printf("	1. Fake Name\n");
-                        printf("	2. Real Name\n");
-                        printf("	3. Both\n");
-                        printf("	0. Nothing\n");
-                        printf("Enter your choice: ");
-                        do
-                        {
-                            fflush(stdin);
-                            scanf("%d", &tempChoice);
-                            if (tempChoice < 0 || tempChoice > 3)
-                                printf("\nEnter a valid choice: ");
-                        } while (tempChoice < 0 || tempChoice > 3);
-                        
-                        switch(tempChoice)
-                        {
-                            case 1: // modify the fake name
-                                printf("\nEnter the fake name: ");                           
-                                fflush(stdin);
-                                fgets(club.fakeName, MAX, stdin);
-                                club.fakeName[strlen(club.fakeName) - 1] = '\0';
-                                break;
-                            
-                            case 2: // modify the real name
-                                printf("\nEnter the real name: ");
-                                fflush(stdin);
-                                fgets(club.realName, MAX, stdin);
-                                club.realName[strlen(club.realName) - 1] = '\0';
-                                club.isKnown = 1;
-                                break;
-                            
-                            case 3: // modify them both
-                                printf("\nEnter the real name: ");
-                                fflush(stdin);
-                                fgets(club.realName, MAX, stdin);
-                                club.realName[strlen(club.realName) - 1] = '\0';
+                fseek(league, (long) (tempID - 1) * sizeof club, SEEK_CUR);
 
-                                printf("Enter the fake name: ");
-                                fflush(stdin);
-                                fgets(club.fakeName, MAX, stdin);
-                                club.fakeName[strlen(club.fakeName) - 1] = '\0';
-      
-                                club.isKnown = 1;
-                                break;
-                             
-                            case 0:
-                                printf("\nBe sure the next time!");
-                        }
+
+                if (1 == fread(&club, sizeof club, 1, league) && club.id == tempID)
+                {
+                    found = 1;
+                    printf("\nClub #%d\n", club.id);
+                    printf("Fake Name: %s\n", club.fakeName);
+                    printf("Real Name: %s\n", club.realName);
                         
-                        if (tempChoice) 
-                        {
-                            fseek(league, - (long) sizeof club, SEEK_CUR);
-                            fwrite(&club, sizeof club, 1, league);
-                            printf("\nDone!");
+                    int tempChoice;
+                    printf("\nWhat do you wanna modify:\n");
+                    printf("	1. Fake Name\n");
+                    printf("	2. Real Name\n");
+                    printf("	3. Both\n");
+                    printf("	0. Nothing\n");
+                    printf("Enter your choice: ");
+                    do
+                    {
+                        fflush(stdin);
+                        scanf("%d", &tempChoice);
+                        if (tempChoice < 0 || tempChoice > 3)
+                            printf("\nEnter a valid choice: ");
+                    } while (tempChoice < 0 || tempChoice > 3); 
+                       
+                    switch(tempChoice)
+                    {
+                        case 1: // modify the fake name
+                            printf("\nEnter the fake name: ");                           
+                            fflush(stdin);
+                            fgets(club.fakeName, MAX, stdin);
+                            club.fakeName[strlen(club.fakeName) - 1] = '\0';
                             break;
-                        }
+                            
+                        case 2: // modify the real name
+                            printf("\nEnter the real name: ");
+                            fflush(stdin);
+                            fgets(club.realName, MAX, stdin);
+                            club.realName[strlen(club.realName) - 1] = '\0';
+                            club.isKnown = 1;
+                            break;
+                            
+                        case 3: // modify them both
+                            printf("\nEnter the real name: ");
+                            fflush(stdin);
+                            fgets(club.realName, MAX, stdin);
+                            club.realName[strlen(club.realName) - 1] = '\0';
+
+                            printf("Enter the fake name: ");
+                            fflush(stdin);
+                            fgets(club.fakeName, MAX, stdin);
+                            club.fakeName[strlen(club.fakeName) - 1] = '\0';
+      
+                            club.isKnown = 1;
+                            break;
+                             
+                        case 0:
+                            printf("\nBe sure the next time!");
+                    }
+                        
+                    if (tempChoice) 
+                    {
+                        fseek(league, - (long) sizeof club, SEEK_CUR);
+                        fwrite(&club, sizeof club, 1, league);
+                        printf("\nDone!");
                     }
                 }
                 
                 if (!found)
-                    printf("The ID is incorrect!\n");
+                    printf("The ID is incorrect!\n");                
                     
                 fclose(league);
                 repeat = 1;
