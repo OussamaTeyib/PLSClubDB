@@ -84,7 +84,7 @@ int main(void)
             {
                 league = fopen(name, "wb");
                 if (!league)
-                    die("Cannot create the file!");
+                    die("Cannot create the corresponding file!");
                 
                 printf("\nEnter the number of clubs: ");
                 do
@@ -139,10 +139,10 @@ int main(void)
             {
                 league = fopen(name, "rb+");
                 if (!league)
-                    die("Cannot open the file!");
+                    die("Cannot open the corresponding file!");
                 
                 if (1 != fread(&nClubs, sizeof nClubs, 1, league))
-                    die("This file is empty!"); 
+                    die("The corresponding file is empty!"); 
                 
                 int tempID, found = 0;
                 printf ("Enter the id of the club: ");
@@ -229,10 +229,10 @@ int main(void)
             {
                 league = fopen(name, "rb");
                 if (!league)
-                    die("Cannot open the file!");
+                    die("Cannot open the corresponding file!");
                 
                 if (1 != fread(&nClubs, sizeof nClubs, 1, league))
-                    die("This file is empty!");
+                    die("The corresponding file is empty!");
 
                 int printUnknown;
                 printf("\nNumber of clubs is: %d\n", nClubs);
@@ -285,7 +285,7 @@ int main(void)
                 WIN32_FIND_DATAA findData;
                 HANDLE hFind = FindFirstFileA("../leagues/*.bin", &findData);   
                 if (hFind == INVALID_HANDLE_VALUE)
-                    die("Cannot find any league!");
+                    die("Cannot find any corresponding file!");
 
                 int printUnknown;
                 printf("Print unknown clubs? (1/0): ");
