@@ -164,15 +164,16 @@ int main(void)
                     printf("	1. Fake Name\n");
                     printf("	2. Real Name\n");
                     printf("	3. Both\n");
+                    printf("	4. Set as unknown\n");
                     printf("	0. Nothing\n");
                     printf("Enter your choice: ");
                     do
                     {
                         fflush(stdin);
                         scanf("%d", &tempChoice);
-                        if (tempChoice < 0 || tempChoice > 3)
+                        if (tempChoice < 0 || tempChoice > 4)
                             printf("\nEnter a valid choice: ");
-                    } while (tempChoice < 0 || tempChoice > 3); 
+                    } while (tempChoice < 0 || tempChoice > 4); 
                        
                     switch(tempChoice)
                     {
@@ -204,7 +205,13 @@ int main(void)
       
                             club.isKnown = 1;
                             break;
-                             
+               
+                        case 4: // set as an unknown club
+                            strncpy(club.fakeName, "Not Given", MAX);
+                            strncpy(club.realName, "Unknown", MAX);
+                            club.isKnown = 0;
+                            break;
+
                         case 0:
                             printf("\nBe sure the next time!");
                     }
