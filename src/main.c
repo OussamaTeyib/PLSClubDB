@@ -151,19 +151,18 @@ int main(void)
                
                 fseek(league, (long) (tempID - 1) * sizeof club, SEEK_CUR);
 
-
                 if (1 == fread(&club, sizeof club, 1, league) && club.id == tempID)
                 {
                     found = 1;
                     printf("\nClub #%d\n", club.id);
-                    printf("Fake Name: %s\n", club.fakeName);
                     printf("Real Name: %s\n", club.realName);
+                    printf("Fake Name: %s\n", club.fakeName);
                         
                     int tempChoice;
-                    printf("\nWhat do you wanna modify:\n");
-                    printf("	1. Fake Name\n");
-                    printf("	2. Real Name\n");
-                    printf("	3. Both\n");
+                    printf("\nWhat do you want:\n");
+                    printf("	1. Modify the fake Name\n");
+                    printf("	2. Modify the real Name\n");
+                    printf("	3. Modify them both\n");
                     printf("	4. Set as unknown\n");
                     printf("	0. Nothing\n");
                     printf("Enter your choice: ");
@@ -225,9 +224,9 @@ int main(void)
                 }
                 
                 if (!found)
-                    printf("The ID is incorrect!\n");                
-                    
-                fclose(league);
+                    printf("The ID is incorrect!\n");         
+                
+                fclose(league);    
                 repeat = 1;
                 break;
             }
@@ -253,8 +252,8 @@ int main(void)
                         continue;
                         
                     printf("\nClub #%d\n", club.id);
-                    printf("Fake Name: %s\n", club.fakeName);
                     printf("Real Name: %s\n", club.realName);
+                    printf("Fake Name: %s\n", club.fakeName);
                 }
  
                 fclose(league);
@@ -326,8 +325,8 @@ int main(void)
                                 continue;
                         
                             printf("\n	Club #%d\n", club.id);
-                            printf("	Fake Name: %s\n", club.fakeName);
                             printf("	Real Name: %s\n", club.realName);
+                            printf("	Fake Name: %s\n", club.fakeName);
                         }
                         printf("\n");
                         fclose(league);
