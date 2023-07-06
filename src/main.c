@@ -23,7 +23,7 @@ typedef struct {
 int main(void)
 {
     int choice;
-    system("chcp 1252");
+    system("chcp 1254");
     system("cls");
     wprintf(L"What do you want:\n");
     wprintf(L"	1. Add a league\n");
